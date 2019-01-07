@@ -81,9 +81,3 @@ class TicTacToe_GameAgent(object):
         optimal_value_indices = [(X, Y) for X, Y in zip(optimal_actions_X, optimal_actions_Y)]
         index_choice = np.random.choice(len(optimal_value_indices))
         return optimal_value_indices[index_choice]
-
-def main():
-    print(np.__version__)
-
-if __name__ == "__main__":
-    main()
