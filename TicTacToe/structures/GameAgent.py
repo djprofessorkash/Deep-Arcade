@@ -23,7 +23,7 @@ class TicTacToe_GameAgent(object):
         gameboard_serialization = gameboard.flatten()
         return "".join([str(iterator) for iterator in gameboard_serialization.flatten().tolist()])
 
-    def initiate_exploitations(self):
+    def force_bot_exploitation(self):
         """ Method to end bot's exploration mode and begin bot's moves towards exploitation. """
         self.exploration_rate = 0
 
@@ -38,7 +38,7 @@ class TicTacToe_GameAgent(object):
         self.state_order.append((state_key, action))
 
     def assign_rewards_to_actions(self, reward):
-        """  """
+        """ Method to assign rewards to actions between states. """
         if len(self.state_order) == 0:
             return None
         new_state_key, new_action = self.state_order.pop()
@@ -55,4 +55,21 @@ class TicTacToe_GameAgent(object):
                 reward = self.temporal_difference_learner(reward, new_state_key, current_state_key).item(new_action)
                 self.states[current_state_key].itemset(current_action, reward)
             new_state_key, new_action = current_state_key, current_action
-            
+
+    def swap_move_selections(self, gameboard):
+        """ Method to swap between exploration and exploitation modes. """
+        current_state_key = TicTacToe_GameAgent.flatten_gameboard(gameboard)
+        exploration = np.random.random() < self.exploration_rate
+        print("explore" if exploration or current_state_key not in self.states else "exploit")
+        current_action = self.initiate_explorations(gameboard) if exploration or current_state_key not in self.states else self.initiate_exploitations(current_state_key)
+        print(current_action)
+        self.set_state_by_action(gameboard, current_action)
+        return current_action
+
+    def initiate_explorations(self, gameboard):
+        """ Method to initiate bot's exploration mode to locate empty cell. """
+        return
+
+    def initiate_exploitations(self, gameboard):
+        """ Method to initiate bot's exploitation mode to determine best play action. """
+        return
