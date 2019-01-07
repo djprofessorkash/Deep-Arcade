@@ -18,9 +18,14 @@ def train_reinforcer(num_epochs, bot_1, bot_2):
     """ Global function to run generational training for the game's reinforcement model. """
     return
 
-def _bot_optimizer(game_session, bot_1, bot_2):
+def _bot_optimizer(game_session, bot_1, bot_2, bot_sym_1, bot_sym_2):
     """ Global helper function to optimize bot's decision vectors based on successful game outcome. """
-    return
+    if game_session.winner == bot_sym_1:
+        bot_1.assign_rewards_to_actions(1)
+        bot_2.assign_rewards_to_actions(-1)
+    elif game_session.winner == bot_sym_2:
+        bot_1.assign_rewards_to_actions(-1)
+        bot_2.assign_rewards_to_actions(1)
 
 def main():
     """ Main run function. """
