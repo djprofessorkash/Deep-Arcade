@@ -58,7 +58,7 @@ class TicTacToe_GameBoard(object):
         print(gameboard_architecture)
 
     def _axis_has_same_values(self, axis, element, el_X, el_Y):
-        """ Helper method that checks if row/column of gameboard grid matrix has same values throughout. """
+        """ Helper method that checks if row/column of gameboard matrix has same values throughout. """
         MAX_CEILING, resultant_ = self.gameboard.shape[0], True
         row_index, column_index = 0, 0
         iterator_major, iterator_fixed, iterator_redundant = (column_index, el_X, el_Y) if axis == 0 else (row_index, el_Y, el_X)
@@ -70,6 +70,34 @@ class TicTacToe_GameBoard(object):
                     break
             iterator_major += 1
         return resultant_
+
+    def _diagonal_has_same_values(self, orientation, element, el_X, el_Y):
+        """ Helper method that checks if checked diagonal of gameboard matrix has same values throughout. """
+        MAX_CEILING, resultant_ = self.gameboard.shape[0], True
+        iterator = int()
+        if orientation == "left":
+            jterator = int()
+        elif orientation == "right":
+            jterator = MAX_CEILING - 1
+        while iterator < MAX_CEILING:
+            if iterator != el_X:
+                if self.gameboard[iterator][jterator] != element or self.gameboard[iterator][jterator] == 0:
+                    resultant_ = False
+                    break
+            iterator += 1
+            if orientation == "left":
+                jterator += 1
+            elif orientation == "right":
+                jterator -= 1
+        return resultant_
+
+    def _lines_have_same_values(self, orientation, element, el_X, el_Y):
+        """  """
+        if orientation == "columns":
+            axis = 1
+        elif orientation == "rows":
+            axis = 0
+        return self._axis_has_same_values(axis, element, el_X, el_Y)
 
 def main():
     game = TicTacToe_GameBoard()
