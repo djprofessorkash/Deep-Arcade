@@ -130,6 +130,25 @@ class TicTacToe_GameBoard(object):
             self.is_filled = True
         return self.is_filled
 
+    def _player_mover(self, element_symbol, el_X, el_Y):
+        """ Helper method that facilitates logic to move player symbol into data-driven location. """
+        current_symbol = None
+        if element_symbol == self.syms_O.get("symbol"):
+            current_symbol = self.syms_O
+        elif element_symbol == self.syms_X.get("symbol"):
+            current_symbol = self.syms_X
+        else:
+            return
+        if self.gameboard[el_X][el_Y] == 0:
+            self.gameboard[el_X][el_Y] = current_symbol.get("value")
+            self.create_gameboard_architecture()
+            if self.check_winning_move(current_symbol.get("symbol"), current_symbol.get("value"), el_X, el_Y):
+                print("Winner is: {}!".format(self.winner))
+                return self.winner
+            elif self.check_if_filled():
+                print("Draw!")
+                return "draw"
+
 def main():
     game = TicTacToe_GameBoard()
     game.create_gameboard_architecture()
