@@ -149,12 +149,15 @@ class TicTacToe_GameBoard(object):
                 print("Draw!")
                 return "draw"
 
-    def play_move(self, el_X, el_Y):
+    def play_move(self, player, el_X, el_Y):
         """ Method that allows for player-driven moves across gameboard grid. """
         MAX_CEILING = self.gameboard.shape[0]
         if el_X > MAX_CEILING - 1 or el_Y > MAX_CEILING:
             return
-        self._player_mover(self.player_sym.get("symbol"), el_X, el_Y)
+        if player == "user":
+            self._player_mover(self.player_sym.get("symbol"), el_X, el_Y)
+        elif player == "bot":
+            self._player_mover(self.bot_sym.get("symbol"), el_X, el_Y)
 
 def main():
     game = TicTacToe_GameBoard()
