@@ -6,5 +6,5 @@ SUMMARY:        Object structure containing logic for allowing the bot
                 to manipulate the game board environment and win the game.
 """
 
-class Game_Agent(object):
+class TicTacToe_GameAgent(object):
     """ Logic machine to allow bot to make decisions to win the Tic Tac Toe game. """
