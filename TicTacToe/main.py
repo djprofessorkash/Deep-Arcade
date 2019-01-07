@@ -9,17 +9,16 @@ SUMMARY:        Main Python file for controlling deep learning reinforcement sim
 # TODO: Improve at architectural actualization by importing only essential libraries/functions
 # from matplotlib import pyplot as plt
 # from matplotlib import ticker
-# import numpy as np
-# import pandas as pd
 # import seaborn as sns
+import numpy as np
+import pandas as pd
 from structures import GameBoard, GameAgent
-from numpy import zeros
-from pandas import DataFrame as df
+from time import time as t
 
 def train_reinforcer(num_epochs, bot_1, bot_2, bot_sym_1, bot_sym_2):
     """ Global function to run generational training for the game's reinforcement model. """
     bot_1_wins, bot_2_wins = int(), int()
-    traced_wins = df(data=zeros((num_epochs, 2)), columns=["bot_1", "bot_2"])
+    traced_wins = pd.DataFrame(data=np.zeros((num_epochs, 2)), columns=["bot_1", "bot_2"])
     for iterator in range(num_epochs):
         print("-" * 100)
         print("EPOCH: {}".format(iterator + 1))
@@ -50,7 +49,10 @@ def main():
     bot_sym_1, bot_sym_2 = "O", "X"
     bot_1, bot_2 = GameAgent.TicTacToe_GameAgent(), GameAgent.TicTacToe_GameAgent()
     epochs_ = 5000
+
+    t0 = t()
     traced_wins, bot_1_wins, bot_2_wins = train_reinforcer(epochs_, bot_1, bot_2, bot_sym_1, bot_sym_2)
+    t1 = t()
 
 if __name__ == "__main__":
     main()
