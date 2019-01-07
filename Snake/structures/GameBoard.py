@@ -1,5 +1,5 @@
 """
-TITLE:          GameSession.py (Snake)
+TITLE:          GameBoard.py (Snake)
 AUTHOR:         Aakash Sudhakar
 
 SUMMARY:        Support Python file holding the game session instance for 
