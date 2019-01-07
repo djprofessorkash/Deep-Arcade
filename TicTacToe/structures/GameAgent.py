@@ -68,8 +68,22 @@ class TicTacToe_GameAgent(object):
 
     def initiate_explorations(self, gameboard):
         """ Method to initiate bot's exploration mode to locate empty cell. """
-        return
+        empties_X, empties_Y = np.where(gameboard == 0)
+        empty_cells = [(X, Y) for X, Y in zip(empties_X, empties_Y)]
+        random_empty_cell_index = np.random.choice(len(empty_cells))
+        return empty_cells[random_empty_cell_index]
 
-    def initiate_exploitations(self, gameboard):
+    def initiate_exploitations(self, state_key):
         """ Method to initiate bot's exploitation mode to determine best play action. """
-        return
+        state_values = self.states[state_key]
+        print("State Rewards: {}".format(state_values))
+        optimal_actions_X, optimal_actions_Y = np.where(state_values == state_values.max())
+        optimal_value_indices = [(X, Y) for X, Y in zip(optimal_actions_X, optimal_actions_Y)]
+        index_choice = np.random.choice(len(optimal_value_indices))
+        return optimal_value_indices[index_choice]
+
+def main():
+    print(np.__version__)
+
+if __name__ == "__main__":
+    main()
