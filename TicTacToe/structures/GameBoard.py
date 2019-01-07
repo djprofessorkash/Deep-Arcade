@@ -14,7 +14,7 @@ class TicTacToe_GameBoard(object):
         self.N = N
         self.gameboard = None
         self._reset_gameboard()
-        self.stale = False
+        self.is_filled = False
         self.syms_empty = {
             "symbol": " ",
             "value": 0
@@ -72,7 +72,7 @@ class TicTacToe_GameBoard(object):
         return resultant_
 
     def _diagonal_has_same_values(self, orientation, element, el_X, el_Y):
-        """ Helper method that checks if checked diagonal of gameboard matrix has same values throughout. """
+        """ Helper method that checks if current diagonal of gameboard matrix has same values throughout. """
         MAX_CEILING, resultant_ = self.gameboard.shape[0], True
         iterator = int()
         if orientation == "left":
@@ -92,12 +92,43 @@ class TicTacToe_GameBoard(object):
         return resultant_
 
     def _lines_have_same_values(self, orientation, element, el_X, el_Y):
-        """  """
+        """ Helper method that checks if collective rows/columns have same values throughout game matrix.  """
         if orientation == "columns":
             axis = 1
         elif orientation == "rows":
             axis = 0
         return self._axis_has_same_values(axis, element, el_X, el_Y)
+
+    def check_any_diagonals_have_same_values(self, element, el_X, el_Y):
+        """ Method that checks if any diagonals across game matrix have same values. """
+        MAX_CEILING = self.gameboard.shape[0]
+        if el_X == el_Y and el_X + el_Y == MAX_CEILING - 1:
+            return self._diagonal_has_same_values("left", element, el_X, el_Y) or self._diagonal_has_same_values("right", element, el_X, el_Y)
+        if el_X == el_Y:
+            return self._diagonal_has_same_values("left", element, el_X, el_Y)
+        if el_X + el_Y == MAX_CEILING - 1:
+            return self._diagonal_has_same_values("right", element, el_X, el_Y)
+        else:
+            return False
+
+    def check_game_over(self, player, element, el_X, el_Y):
+        """ Method that checks current game status and reports if game is over. """
+        return self._lines_have_same_values("columns", element, el_X, el_Y) or self._lines_have_same_values("rows", element, el_X, el_Y) or self.check_any_diagonals_have_same_values(element, el_X, el_Y)
+
+    def check_winning_move(self, player, element, el_X, el_Y):
+        """ Method that checks if current move iteration is player's winning move. """
+        if self.check_game_over(player, element, el_X, el_Y):
+            self.winner = player
+            return True
+        else:
+            return False
+
+    def check_if_filled(self):
+        """ Method that checks if entire game board is filled with moves. """
+        x, y = np.where(self.gameboard == 0)
+        if len(x) == 0 and len(y) == 0:
+            self.is_filled = True
+        return self.is_filled
 
 def main():
     game = TicTacToe_GameBoard()
