@@ -45,7 +45,7 @@ class TicTacToe_GameBoard(object):
             return self.syms_empty.get("symbol")
 
     def create_gameboard_architecture(self):
-        """ Draws the game board architecture iteratively as empty grid. """
+        """ Method that draws the game board architecture iteratively as empty grid. """
         gameboard_elements = self.gameboard.size
         play_symbols = [self.create_play_symbol_by_element(self.gameboard.item(iterator)) for iterator in range(gameboard_elements)]
         gameboard_architecture = """
@@ -56,6 +56,20 @@ class TicTacToe_GameBoard(object):
              {} | {} | {}
         """.format(*play_symbols)
         print(gameboard_architecture)
+
+    def _axis_has_same_values(self, axis, element, el_X, el_Y):
+        """ Helper method that checks if row/column of gameboard grid matrix has same values throughout. """
+        MAX_CEILING, resultant_ = self.gameboard.shape[0], True
+        row_index, column_index = 0, 0
+        iterator_major, iterator_fixed, iterator_redundant = (column_index, el_X, el_Y) if axis == 0 else (row_index, el_Y, el_X)
+        while iterator_major < MAX_CEILING:
+            if iterator_major != iterator_redundant:
+                gameboard_element = self.gameboard[iterator_fixed][iterator_major] if axis == 0 else self.gameboard[iterator_major][iterator_fixed]
+                if gameboard_element != element or gameboard_element == 0:
+                    resultant_ = False
+                    break
+            iterator_major += 1
+        return resultant_
 
 def main():
     game = TicTacToe_GameBoard()
