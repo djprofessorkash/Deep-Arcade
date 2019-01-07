@@ -29,10 +29,30 @@ class TicTacToe_GameAgent(object):
 
     def temporal_difference_learner(self, reward, new_state_key, old_state_key):
         """ Method to teach reinforcement model to learn via temporal difference algorithm. """
-        old_state = self.states.get(old_state_key, np.zeros((self.N, self.N)))
+        old_state = self.states.get(old_state_key, np.zeros((3, 3)))
         return self.learning_rate * ((reward * self.states[new_state_key]) - old_state)
 
     def set_state_by_action(self, old_gameboard, action):
         """ Method to save action to given state across gameboard. """
         state_key = TicTacToe_GameAgent.flatten_gameboard(old_gameboard)
         self.state_order.append((state_key, action))
+
+    def assign_rewards_to_actions(self, reward):
+        """  """
+        if len(self.state_order) == 0:
+            return None
+        new_state_key, new_action = self.state_order.pop()
+        self.states[new_state_key] = np.zeros((3, 3))
+        self.states[new_state_key].itemset(new_action, reward)
+        while self.state_order:
+            current_state_key, current_action = self.state_order.pop()
+            reward *= self.discount_factor
+            if current_state_key in self.states:
+                reward += self.temporal_difference_learner(reward, new_state_key, current_state_key).item(new_action)
+                self.states[current_state_key].itemset(current_action, reward)
+            else:
+                self.states[current_state_key] = np.zeros((3, 3))
+                reward = self.temporal_difference_learner(reward, new_state_key, current_state_key).item(new_action)
+                self.states[current_state_key].itemset(current_action, reward)
+            new_state_key, new_action = current_state_key, current_action
+            
