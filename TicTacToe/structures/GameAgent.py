@@ -6,6 +6,8 @@ SUMMARY:        Object structure containing logic for allowing the bot
                 to manipulate the game board environment and win the game.
 """
 
+import numpy as np
+
 class TicTacToe_GameAgent(object):
     """ Logic machine to allow bot to make decisions to play the TicTacToe game. """
     def __init__(self, exploration_rate=0.33, learning_rate=0.5, discount_factor=0.01):
@@ -14,3 +16,13 @@ class TicTacToe_GameAgent(object):
         self.exploration_rate = exploration_rate
         self.learning_rate = learning_rate
         self.discount_factor = discount_factor
+    
+    @staticmethod
+    def flatten_gameboard(gameboard):
+        """ Static method to convert gameboard grid into serialized, flattened array. """
+        gameboard_serialization = gameboard.flatten()
+        return "".join([str(iterator) for iterator in gameboard_serialization.flatten().tolist()])
+
+    def initiate_exploitations(self):
+        """ Method to end bot's exploration mode and begin bot's moves towards exploitation. """
+        self.exploration_rate = 0
