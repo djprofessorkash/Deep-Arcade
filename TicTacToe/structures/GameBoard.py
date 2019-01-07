@@ -38,18 +38,16 @@ class TicTacToe_GameBoard(object):
     def create_play_symbol_by_element(self, element):
         """ Method creates current symbol (" ", "X", "O") based on current game board element position. """
         if element == self.syms_X.get("value"):
-            return self.syms_X.get("mark")
+            return self.syms_X.get("symbol")
         elif element == self.syms_O.get("value"):
-            return self.syms_O.get("mark")
+            return self.syms_O.get("symbol")
         else:
-            return self.syms_empty.get("mark")
+            return self.syms_empty.get("symbol")
 
     def create_gameboard_architecture(self):
-        """ Draws the game board architecture iteratively. """
+        """ Draws the game board architecture iteratively as empty grid. """
         gameboard_elements = self.gameboard.size
-        print(gameboard_elements)
-        play_symbols = [self.create_play_symbol_by_element(self.gameboard.item(iterator) for iterator in range(gameboard_elements))]
-        print(play_symbols)
+        play_symbols = [self.create_play_symbol_by_element(self.gameboard.item(iterator)) for iterator in range(gameboard_elements)]
         gameboard_architecture = """
              {} | {} | {}
             -----------
