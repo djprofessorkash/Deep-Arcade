@@ -26,3 +26,8 @@ class TicTacToe_GameAgent(object):
     def initiate_exploitations(self):
         """ Method to end bot's exploration mode and begin bot's moves towards exploitation. """
         self.exploration_rate = 0
+
+    def temporal_difference_learner(self, reward, new_state_key, old_state_key):
+        """ Method to teach reinforcement model to learn via temporal difference algorithm. """
+        old_state = self.states.get(old_state_key, np.zeros((self.N, self.N)))
+        return self.learning_rate * ((reward * self.states[new_state_key]) - old_state)
