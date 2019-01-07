@@ -9,7 +9,7 @@ SUMMARY:        Object structure containing logic for setting up
 import numpy as np
 
 class TicTacToe_GameBoard(object):
-    """ Game board environment for Tic Tac Toe. """
+    """ Game board environment for TicTacToe. """
     def __init__(self, N=3, user_play_symbol="X"):
         self.N = N
         self.gameboard = None
@@ -158,10 +158,3 @@ class TicTacToe_GameBoard(object):
             self._player_mover(self.player_sym.get("symbol"), el_X, el_Y)
         elif player == "bot":
             self._player_mover(self.bot_sym.get("symbol"), el_X, el_Y)
-
-def main():
-    game = TicTacToe_GameBoard()
-    game.create_gameboard_architecture()
-
-if __name__ == "__main__":
-    main()

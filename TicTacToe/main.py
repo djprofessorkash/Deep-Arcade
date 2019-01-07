@@ -25,7 +25,7 @@ def _bot_optimizer(game_session, bot_1, bot_2):
 def main():
     """ Main run function. """
     bot_sym_1, bot_sym_2 = "O", "X"
-    bot_1, bot_2 = GameAgent(), GameAgent()
+    bot_1, bot_2 = GameAgent.TicTacToe_GameAgent(), GameAgent.TicTacToe_GameAgent()
     epochs_ = 5000
     return
 
