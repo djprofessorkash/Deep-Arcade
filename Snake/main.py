@@ -10,7 +10,7 @@ import pygame
 # import seaborn as sns
 # import pandas as pd
 # import numpy as np
-from structures import DeepQNetworkAgent, GameSession, PlayerInstance, PelletInstance
+from structures import GameAgent, GameBoard, PlayerInstance, PelletInstance
 
 display_option, speed = False, 0
 pygame.font.init()
@@ -21,7 +21,11 @@ def _update_screen():
 
 def main():
     """ Main run function. """
-    print("\nHELLO WORLD\n")
+    pygame.init()
+    game_agent = GameAgent()
+    training_counter = 0
+    score_plot, counter_plot = list(), list()
+    scoreboard = 0
 
 if __name__ == "__main__":
     main()
