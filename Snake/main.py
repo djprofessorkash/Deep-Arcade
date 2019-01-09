@@ -12,6 +12,9 @@ import pygame
 # import numpy as np
 from structures import DeepQNetworkAgent, GameSession, PlayerInstance, PelletInstance
 
+display_option, speed = False, 0
+pygame.font.init()
+
 def main():
     print("\nHELLO WORLD\n")
 

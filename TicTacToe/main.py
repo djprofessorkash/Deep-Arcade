@@ -52,6 +52,7 @@ def main():
 
     t0 = t()
     traced_wins, bot_1_wins, bot_2_wins = train_reinforcer(epochs_, bot_1, bot_2, bot_sym_1, bot_sym_2)
+    bot_1.force_bot_exploitation()
     t1 = t()
     print("\nREINFORCEMENT TRAINING TIME: {:.3f} sec.\n".format(t1 - t0))
 
