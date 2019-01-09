@@ -15,7 +15,12 @@ from structures import DeepQNetworkAgent, GameSession, PlayerInstance, PelletIns
 display_option, speed = False, 0
 pygame.font.init()
 
+def _update_screen():
+    """ Helper function to update physical screen. """
+    pygame.display.update()
+
 def main():
+    """ Main run function. """
     print("\nHELLO WORLD\n")
 
 if __name__ == "__main__":

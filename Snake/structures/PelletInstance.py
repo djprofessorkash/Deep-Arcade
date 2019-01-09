@@ -14,7 +14,7 @@ class PelletInstance(object):
     def __init__(self):
         self.dim_x = 240
         self.dim_y = 200
-        pygame.image.load("img/pellet2.png")
+        self.sprite = pygame.image.load("img/pellet2.png")
 
     def get_pellet_position(self, game_session, player_instance):
         """ Method to grab current pellet position and check if pellet has been consumed by player. """
@@ -24,3 +24,8 @@ class PelletInstance(object):
             return self.dim_x, self.dim_y
         else:
             self.get_pellet_position(game_session, player_instance)
+
+    def display_pellet(self, x_pos, y_pos, game_session):
+        """ Method to display pellet sprite and position in game session. """
+        game_session.play_display.blit(self.sprite, (x_pos, y_pos))
+        _update_screen()
