@@ -6,6 +6,7 @@ SUMMARY:        Support Python file holding the player object instance for
                 the deep learning reinforcement simulation of Snake.
 """
 
+from numpy import array_equal
 import pygame
 
 class PlayerInstance(object):
@@ -38,3 +39,29 @@ class PlayerInstance(object):
             _update_screen()
         else:
             pygame.time.wait(300)
+
+    def move_player(self, move_action, x_pos, y_pos, game_session, pellets, game_agent):
+        """ Method that stores logic to perform player positional move. """
+        move_vector = [self.delta_x, self.delta_y]
+        if self.is_eaten:
+            self.position.append([self.dim_x, self.dim_y])
+            self.is_eaten = False
+            self.food += 1
+        move_vector = _move_logic(move_vector, move_action)
+        self.delta_x, self.delta_y = move_vector
+        self.dim_x = x_pos + self.delta_x
+        self.dim_y = y_pos + self.delta_y
+
+    def _move_logic(self, move_vector, move_action):
+        """ Helper method to run logical if-statements that assess directional player movement. """
+        POTENTIAL_MOVES = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+        if array_equal(move_action, POTENTIAL_MOVES[0]):
+            return self.delta_x, self.delta_y
+        elif array_equal(move_action, POTENTIAL_MOVES[1]) and self.delta_y == 0:
+            return [0, self.delta_x]
+        elif array_equal(move_action, POTENTIAL_MOVES[1]) and self.delta_x == 0:
+            return [-self.delta_y, 0]
+        elif array_equal(move_action, POTENTIAL_MOVES[2]) and self.delta_y == 0:
+            return [0, -self.delta_x]
+        elif array_equal(move_action, POTENTIAL_MOVES[2]) and self.delta_x == 0:
+            return [-self.delta_y, 0]
