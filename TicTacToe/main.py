@@ -23,16 +23,31 @@ def train_reinforcer(num_epochs, bot_1, bot_2, bot_sym_1, bot_sym_2):
         print("-" * 100)
         print("EPOCH: {}".format(iterator + 1))
         gameboard = GameBoard.TicTacToe_GameBoard()
+        # Initialize GameAgent state with empty board via GameBoard 
         while not gameboard.is_filled:
-            winner = gameboard._player_mover(bot_sym_2, *bot_2.swap_move_selections(gameboard.gameboard))
-            if winner:
+            # if gameboard doesn't contain zeros:
+            print(np.amin(gameboard.gameboard))
+            if np.amin(gameboard.gameboard) > 0:
+                break
+            else:
+                winner_1 = gameboard._player_mover(bot_sym_1, *bot_1.swap_move_selections(gameboard.gameboard))
+            print(np.amin(gameboard.gameboard))
+            if np.amin(gameboard.gameboard) > 0:
+                break
+            else:
+                winner_2 = gameboard._player_mover(bot_sym_2, *bot_2.swap_move_selections(gameboard.gameboard))
+            if winner_1 == "draw" or winner_2 == "draw":
+                break
+            else:
                 _bot_optimizer(gameboard, bot_1, bot_2, bot_sym_1, bot_sym_2)
-                bot_2_wins += 1
-                traced_wins.set_value(iterator, "bot_2", 1)
-                break
-                traced_wins[iterator] = 2
-            elif winner == "draw":
-                break
+                if winner_1:
+                    bot_1_wins += 1
+                    traced_wins.set_value(iterator, "bot_1", 1)
+                    break
+                if winner_2:
+                    bot_2_wins += 1
+                    traced_wins.set_value(iterator, "bot_2", 1)
+                    break
     return traced_wins, bot_1_wins, bot_2_wins
 
 def _bot_optimizer(game_session, bot_1, bot_2, bot_sym_1, bot_sym_2):
@@ -55,6 +70,7 @@ def main():
     bot_1.force_bot_exploitation()
     t1 = t()
     print("\nREINFORCEMENT TRAINING TIME: {:.3f} sec.\n".format(t1 - t0))
+    print("\nBOT 1 WINS: \t{}\nBOT 2 WINS: \t{}\n".format(bot_1_wins, bot_2_wins))
 
 if __name__ == "__main__":
     main()
