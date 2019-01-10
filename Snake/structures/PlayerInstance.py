@@ -47,13 +47,13 @@ class PlayerInstance(object):
             self.position.append([self.dim_x, self.dim_y])
             self.is_eaten = False
             self.food += 1
-        move_vector = _move_logic(move_vector, move_action)
+        move_vector = self._move_logic(move_vector, move_action)
         self.delta_x, self.delta_y = move_vector
         self.dim_x = x_pos + self.delta_x
         self.dim_y = y_pos + self.delta_y
 
     def _move_logic(self, move_vector, move_action):
-        """ Helper method to run logical if-statements that assess directional player movement. """
+        """ Helper method to run logical switch-cases that assess directional player movement. """
         POTENTIAL_MOVES = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
         if array_equal(move_action, POTENTIAL_MOVES[0]):
             return self.delta_x, self.delta_y
