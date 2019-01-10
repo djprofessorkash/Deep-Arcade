@@ -17,3 +17,23 @@ from operator import add
 
 class GameAgent(object):
     """ Object structure storing the Deep Reinforcement Learning Agent. """
+    def __init__(self):
+        pass
+
+    def get_game_state(self):
+        pass
+
+    def get_game_reward(self):
+        pass
+
+    def produce_network_architecture(self):
+        pass
+
+    def save_state_to_memory(self):
+        pass
+
+    def short_term_memory_trainer(self):
+        pass
+
+    def replay_from_memory(self):
+        pass
