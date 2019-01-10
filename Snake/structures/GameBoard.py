@@ -16,7 +16,7 @@ class GameBoard(object):
         self.play_height = play_height
         self.play_display = pygame.display.set_mode((play_width, play_height + 60))
         # self.background = pygame.image.load("img/background.png")
-        self.crash = False
+        self.has_crashed = False
         self.player = PlayerInstance(self)
         self.food = PelletInstance()
         self.score = 0
