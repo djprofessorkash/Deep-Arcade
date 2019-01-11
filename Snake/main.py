@@ -15,6 +15,15 @@ from structures import GameAgent, GameBoard, PlayerInstance, PelletInstance
 display_option, speed = False, 0
 pygame.font.init()
 
+def player_eat_food(player_instance, pellet_instance, game_session):
+    """ Function to facilitate food consumption and player growth across game session. """
+    if player_instance.dim_x == pellet_instance.dim_x and player_instance.dim_y == pellet_instance.dim_y:
+        pellet_instance.get_pellet_position(game_session, player_instance)
+        player_instance.has_eaten = True
+        game_session.score += 1
+
+
+
 def _update_screen():
     """ Helper function to update physical screen. """
     pygame.display.update()

@@ -75,9 +75,9 @@ class GameAgent(object):
             return risky_rights or risky_lefts or risky_ups or risky_downs
 
         STATE_VECTOR = [
-            _get_dangerous_straight_logic(),       # DANGEROUS STRAIGHT
-            _get_dangerous_right_logic(),          # DANGEROUS RIGHT
-            _get_dangerous_left_logic(),           # DANGEROUS LEFT
+            _get_dangerous_straight_logic(),                                    # DANGEROUS STRAIGHT
+            _get_dangerous_right_logic(),                                       # DANGEROUS RIGHT
+            _get_dangerous_left_logic(),                                        # DANGEROUS LEFT
             player_instance.delta_x == -20,                                     # PLAYER LEFT
             player_instance.delta_x == 20,                                      # PLAYER RIGHT
             player_instance.delta_y == -20,                                     # PLAYER UP
