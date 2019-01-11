@@ -2,7 +2,9 @@
 
 Welcome to the <i>Deep Reinforcement Learning Game Library</i>! 
 
-This is a collection of games and playful simulations designed with two goals in mind: to pit users against custom-trained deep learning bots and to introduce fellow gamers and developers to a profound application of programming in game development!
+This is a collection of games and playful simulations designed with two goals in mind:
+ - To pit users against custom-trained deep learning bots.
+ - To introduce fellow gamers and developers to a profound application of programming in game development!
 
 <br>
 
@@ -10,7 +12,9 @@ This is a collection of games and playful simulations designed with two goals in
 
 With these projects, I aim to learn more and dig deeper into the mathematical and algorithmic mechanics behind deep learning and data science, so to better understand its usefulness in today's world.
 
-Please *star* this repo and *follow* my progress into the world of deep learning! :-)
+Please *star* this repo and *follow* my progress into the world of deep learning! 
+
+:-)
 
 ---
 
@@ -20,8 +24,8 @@ Please *star* this repo and *follow* my progress into the world of deep learning
 
 ### FUTURE GAMES:
 - Super Mario Brothers
-- The Binding of Isaac.
-- Grand Theft Auto 5.
+- The Binding of Isaac
+- Grand Theft Auto 5
 
 #### Technologies Used:
 - Python 3.x
