@@ -25,7 +25,7 @@ class PlayerInstance(object):
         self.position.append([self.dim_x, self.dim_y])
         self.food = 1
         self.has_eaten = False
-        self.image = pygame.image.load("structures/img/SnakeBody.png")
+        self.image = pygame.image.load("structures/img/SnakeBody2.png")
         self.delta_x, self.delta_y = 20, 0
 
     def update_relative_position(self, x_pos, y_pos):

@@ -13,7 +13,7 @@ from .PlayerInstance import PlayerInstance
 class GameBoard(object):
     """ Object structure storing the GameBoard session. """
     def __init__(self, play_width, play_height):
-        pygame.display.set_caption("SnakeGen")
+        pygame.display.set_caption("MakeSnake")
         self.play_width = play_width
         self.play_height = play_height
         self.play_display = pygame.display.set_mode((play_width, play_height + 60))
