@@ -18,7 +18,17 @@ from operator import add
 class GameAgent(object):
     """ Object structure storing the Deep Reinforcement Learning Agent. """
     def __init__(self):
-        pass
+        self.reward = 0
+        self.gamma = 0.9
+        self.df = pd.DataFrame()
+        self.short_memory = np.array([])
+        self.agent_target = 1
+        self.agent_prediction = 0
+        self.learning_rate = 0.0005
+        self.model = self.produce_network_architecture()
+        self.epsilon = 0
+        self.actual = list()
+        self.memory = list()
 
     def get_game_state(self):
         pass
@@ -27,7 +37,17 @@ class GameAgent(object):
         pass
 
     def produce_network_architecture(self):
-        pass
+        model = Sequential()
+        model.add(Dense(output_dim=120, activation="relu", input_dim=11))
+        model.add(Dropout(0.15))
+        model.add(Dense(output_dim=120, activation="relu"))
+        model.add(Dropout(0.15))
+        model.add(Dense(output_dim=120, activation="relu"))
+        model.add(Dropout(0.15))
+        model.add(Dense(output_dim=3, activation="softmax"))
+        optimizer = Adam(self.learning_rate)
+        model.compile(loss="mse", optimizer=optimizer)
+        return model
 
     def save_state_to_memory(self):
         pass
