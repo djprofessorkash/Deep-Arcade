@@ -13,7 +13,7 @@ class PelletInstance(object):
     """ Object storing pellet instance to serve as player food. """
     def __init__(self):
         self.dim_x, self.dim_y = 240, 200
-        self.sprite = pygame.image.load("img/pellet2.png")
+        self.sprite = pygame.image.load("structures/img/pellet.png")
 
     def get_pellet_position(self, game_session, player_instance):
         """ Method to grab current pellet position and check if pellet has been consumed by player. """
@@ -27,4 +27,4 @@ class PelletInstance(object):
     def display_pellet(self, x_pos, y_pos, game_session):
         """ Method to display pellet sprite and position in game session. """
         game_session.play_display.blit(self.sprite, (x_pos, y_pos))
-        _update_screen()
+        pygame.display.update()

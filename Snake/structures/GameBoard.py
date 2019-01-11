@@ -7,6 +7,8 @@ SUMMARY:        Support Python file holding the game session instance for
 """
 
 import pygame
+from .PelletInstance import PelletInstance
+from .PlayerInstance import PlayerInstance
 
 class GameBoard(object):
     """ Object structure storing the GameBoard session. """
@@ -15,7 +17,7 @@ class GameBoard(object):
         self.play_width = play_width
         self.play_height = play_height
         self.play_display = pygame.display.set_mode((play_width, play_height + 60))
-        self.background = pygame.image.load("img/background.png")
+        self.background = pygame.image.load("structures/img/background.png")
         self.has_crashed = False
         self.player = PlayerInstance(self)
         self.food = PelletInstance()

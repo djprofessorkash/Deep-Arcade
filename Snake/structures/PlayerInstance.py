@@ -18,7 +18,7 @@ class PlayerInstance(object):
         self.position.append([self.dim_x, self.dim_y])
         self.food = 1
         self.has_eaten = False
-        self.image = pygame.image.load("img/SnakeBody.png")
+        self.image = pygame.image.load("structures/img/SnakeBody.png")
         self.delta_x, self.delta_y = 20, 0
 
     def update_relative_position(self, x_pos, y_pos):
@@ -32,11 +32,11 @@ class PlayerInstance(object):
     def render_player(self, x_pos, y_pos, pellets, game_session):
         """ Method to continuously display player instance across game session. """
         self.position[-1][0], self.position[-1][1] = x_pos, y_pos
-        if game_session.has_crashed is False:
+        if game_session.has_crashed == False:
             for iterator in range(pellets):
                 x_pos_curr, y_pos_curr = self.position[len(self.position)-iterator-1]
                 game_session.play_display.blit(self.image, (x_pos_curr, y_pos_curr))
-            _update_screen()
+            pygame.display.update()
         else:
             pygame.time.wait(300)
 
