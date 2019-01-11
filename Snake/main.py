@@ -6,10 +6,10 @@ SUMMARY:        Main Python file for controlling deep learning reinforcement sim
 """
 
 import pygame
-# import matplotlib.pyplot as plt
-# import seaborn as sns
+import matplotlib.pyplot as plt
+import seaborn as sns
 # import pandas as pd
-# import numpy as np
+import numpy as np
 from structures import GameAgent, GameBoard, PlayerInstance, PelletInstance
 
 display_option, speed = False, 0
@@ -55,11 +55,17 @@ def render_user_interface(game_session, score, scoreboard):
 
 def render_game(player_instance, pellet_instance, game_session, scoreboard):
     """ Function to render the game board with complete mechanics. """
-    pass
+    game_session.play_display.fill((255, 255, 255))
+    render_user_interface(game_session, game_session.score, scoreboard)
+    player_instance.render_player(player_instance.position[-1][0], player_instance.position[-1][1], player_instance.food, game_session)
+    pellet_instance.display_pellet(pellet_instance.dim_x, pellet_instance.dim_y, game_session)
 
 def _plot_game_results(counter_plot, score_plot):
     """ Helper function utilizing Seaborn to statistically plot game session results. """
-    pass
+    sns.set(color_codes=True)
+    ax = sns.regplot(np.array([counter_plot])[0], np.array([score_plot])[0], color="b", x_jitter=0.1, line_kws={"color": "green"})
+    ax.set(xlabel="games", ylabel="score")
+    plt.show()
 
 def _update_screen():
     """ Helper function to update physical screen. """
