@@ -9,6 +9,13 @@ SUMMARY:        Support Python file holding the player object instance for
 from numpy import array_equal
 import pygame
 
+def player_eat_food(player_instance, pellet_instance, game_session):
+    """ Function to facilitate food consumption and player growth across game session. """
+    if player_instance.dim_x == pellet_instance.dim_x and player_instance.dim_y == pellet_instance.dim_y:
+        pellet_instance.get_pellet_position(game_session, player_instance)
+        player_instance.has_eaten = True
+        game_session.score += 1
+
 class PlayerInstance(object):
     """ Object storing player instance to progress through the game session. """
     def __init__(self, game_session):
@@ -25,7 +32,7 @@ class PlayerInstance(object):
         """ Method to update player's relative position across game session. """
         if self.position[-1][0] != x_pos or self.position[-1][1] != y_pos:
             if self.food > 1:
-                for iterator in range(self.food - 1):
+                for iterator in range(0, self.food - 1):
                     self.position[iterator][0], self.position[iterator][1] = self.position[iterator+1]
             self.position[-1][0], self.position[-1][1] = x_pos, y_pos
     
@@ -51,6 +58,11 @@ class PlayerInstance(object):
         self.delta_x, self.delta_y = move_vector
         self.dim_x = x_pos + self.delta_x
         self.dim_y = y_pos + self.delta_y
+
+        if self.dim_x < 20 or self.dim_x > game_session.play_width - 40 or self.dim_y < 20 or self.dim_y > game_session.play_height - 40 or [self.dim_x, self.dim_y] in self.position:
+            game_session.has_crashed = True
+        player_eat_food(self, pellets, game_session)
+        self.update_relative_position(self.dim_x, self.dim_y)
 
     def _move_logic(self, move_vector, move_action):
         """ Helper method to run logical switch-cases that assess directional player movement. """

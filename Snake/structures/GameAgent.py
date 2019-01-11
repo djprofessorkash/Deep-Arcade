@@ -26,6 +26,7 @@ class GameAgent(object):
         self.agent_prediction = 0
         self.learning_rate = 0.005
         self.model = self.produce_network_architecture()
+        # self.model = self.produce_network_architecture("structures/data/custom_weights.hdf5")
         self.epsilon = 0
         self.actual = list()
         self.memory = list()
@@ -104,7 +105,7 @@ class GameAgent(object):
             self.reward = 10
         return self.reward
 
-    def produce_network_architecture(self):
+    def produce_network_architecture(self, training_weights=None):
         """ Method to create neural network architecture using optimized Keras models. """
         model = Sequential()
         model.add(Dense(120, activation="relu", input_shape=(11,)))
@@ -116,6 +117,8 @@ class GameAgent(object):
         model.add(Dense(3, activation="softmax"))
         optimizer = Adam(self.learning_rate)
         model.compile(loss="mse", optimizer=optimizer)
+        if training_weights:
+            model.load_weights(training_weights)
         return model
 
     def save_state_to_memory(self, current_state, current_action, current_reward, next_state, stop):
