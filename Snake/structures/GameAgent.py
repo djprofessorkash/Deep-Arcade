@@ -37,6 +37,7 @@ class GameAgent(object):
         pass
 
     def produce_network_architecture(self):
+        """ Method to create neural network architecture using optimized Keras models. """
         model = Sequential()
         model.add(Dense(120, activation="relu", input_shape=(11,)))
         model.add(Dropout(0.15))
@@ -49,11 +50,12 @@ class GameAgent(object):
         model.compile(loss="mse", optimizer=optimizer)
         return model
 
-    def save_state_to_memory(self):
-        pass
+    def save_state_to_memory(self, current_state, current_action, current_reward, next_state, stop):
+        """ Method to save current detailed state to object's memory. """
+        self.memory.append((current_state, current_action, current_reward, next_state, stop))
 
     def short_term_memory_trainer(self):
         pass
 
-    def replay_from_memory(self):
+    def replay_from_memory(self, memory_bank):
         pass
