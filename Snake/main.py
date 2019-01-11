@@ -31,11 +31,27 @@ def get_score(score, scoreboard):
 
 def initialize_game(player_instance, game_session, pellet_instance, game_agent):
     """ Function to initialize game session with appropriate player and food parameters. """
-    pass
+    state_init_1 = game_agent.get_game_state(game_session, player_instance, pellet_instance)
+    action_init = [1, 0, 0]
+    player_instance.move_player(action_init, player_instance.dim_x, player_instance.dim_y, game_session, pellet_instance, game_agent)
+    state_init_2 = game_agent.get_game_state(game_session, player_instance, pellet_instance)
+    current_reward = game_agent.get_game_reward(player_instance, game_session.has_crashed)
+    game_agent.save_state_to_memory(state_init_1, action_init, current_reward, state_init_2, game_session.has_crashed)
+    game_agent.replay_from_memory(game_agent.memory)
 
 def render_user_interface(game_session, score, scoreboard):
     """ Function to render the game's UI. """
-    pass
+    font = pygame.font.SysFont("Segoe UI", 20)
+    font_bold = pygame.font.SysFont("Segoe UI", 20, True)
+    score_text = font.render("SCORE: ", True, (0, 0, 0))
+    score_text_number = font.render(str(score), True, (0, 0, 0))
+    highest_score_text = font.render("HIGHEST SCORE: ", True, (0, 0, 0))
+    highest_score_text_number = font_bold.render(str(scoreboard), True, (0, 0, 0))
+    game_session.play_display.blit(score_text, (45, 440))
+    game_session.play_display.blit(score_text_number, (120, 440))
+    game_session.play_display.blit(highest_score_text, (190, 440))
+    game_session.play_display.blit(highest_score_text_number, (350, 440))
+    game_session.play_display.blit(game_session.background, (10, 10))
 
 def render_game(player_instance, pellet_instance, game_session, scoreboard):
     """ Function to render the game board with complete mechanics. """
