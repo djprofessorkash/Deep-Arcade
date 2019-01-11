@@ -54,10 +54,17 @@ class GameAgent(object):
         """ Method to save current detailed state to object's memory. """
         self.memory.append((current_state, current_action, current_reward, next_state, stop))
 
-    def short_term_memory_trainer(self):
-        pass
+    def short_term_memory_trainer(self, current_state, current_action, current_reward, next_state, stop):
+        """ Method to train short-term memory bank using detailed saved state info. """
+        target_ = current_reward
+        if not stop:
+            target_ = current_reward + (self.gamma * np.amax(self.model.predict(next_state.reshape((1, 11)))[0]))
+        target_final = self.model.predict(current_state.reshape((1, 11)))
+        target_final[0][np.argmax(current_action)] = target_
+        self.model.fit(current_state.reshape((1, 11)), target_final, epochs=1, verbose=0)
 
     def replay_from_memory(self, memory_bank):
+        """ Method to retrieve state details from object's memory bank. """
         if len(memory_bank) > 1000:
             batch = sample(memory_bank, 1000)
         else:
