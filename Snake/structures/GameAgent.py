@@ -31,10 +31,53 @@ class GameAgent(object):
         self.memory = list()
 
     def get_game_state(self, game_session, player_instance, pellet_instance):
-        state_vector = [
-            self._get_dangerous_straight_logic(game_session, player_instance),  # DANGEROUS STRAIGHT
-            self._get_dangerous_right_logic(game_session, player_instance),     # DANGEROUS RIGHT
-            self._get_dangerous_left_logic(game_session, player_instance),      # DANGEROUS LEFT
+        """ Method to logically determine detailed current game state using game session parameters. """
+        move_right = player_instance.delta_x == 20
+        move_left = player_instance.delta_x == -20
+        move_up = player_instance.delta_y == -20
+        move_down = player_instance.delta_y == 20
+
+        no_move_x = player_instance.delta_x == 0
+        no_move_y = player_instance.delta_y == 0
+
+        cum_move_right = (list(map(add, player_instance.position[-1], [20, 0])) in player_instance.position)
+        cum_move_left = (list(map(add, player_instance.position[-1], [-20, 0])) in player_instance.position)
+        cum_move_up = (list(map(add, player_instance.position[-1], [0, -20])) in player_instance.position)
+        cum_move_down = (list(map(add, player_instance.position[-1], [0, 20])) in player_instance.position)
+
+        at_right_wall = player_instance.position[-1][0] + 20 >= (game_session.play_width - 20)
+        at_left_wall = player_instance.position[-1][0] - 20 < 20
+        at_top_wall = player_instance.position[-1][-1] - 20 < 20
+        at_bottom_wall = player_instance.position[-1][-1] + 20 >= (game_session.play_height - 20)
+
+        def _get_dangerous_straight_logic():
+            """ Helper method to construct logical calculation of danger-straight movement. """
+            risky_rights = (move_right and no_move_y and (cum_move_right or at_right_wall))
+            risky_lefts = (move_left and no_move_y and (cum_move_left or at_left_wall))
+            risky_ups = (no_move_x and move_up and (cum_move_up or at_top_wall))
+            risky_downs = (no_move_x and move_down and (cum_move_down or at_bottom_wall))
+            return risky_rights or risky_lefts or risky_ups or risky_downs
+
+        def _get_dangerous_right_logic():
+            """ Helper method to construct logical calculation of danger-right movement. """
+            risky_rights = (no_move_x and move_up and (cum_move_right or at_right_wall))
+            risky_lefts = (no_move_x and move_down and (cum_move_left or at_left_wall))
+            risky_ups = (move_left and no_move_y and (cum_move_up or at_top_wall))
+            risky_downs = (move_right and no_move_y and (cum_move_down or at_bottom_wall))
+            return risky_rights or risky_lefts or risky_ups or risky_downs
+
+        def _get_dangerous_left_logic():
+            """ Helper method to construct logical calculation of danger-left movement. """
+            risky_rights = (no_move_x and move_down and (cum_move_right or at_right_wall))
+            risky_lefts = (no_move_x and move_up and (cum_move_left or at_left_wall))
+            risky_ups = (move_right and no_move_y and (cum_move_up or at_top_wall))
+            risky_downs = (move_left and no_move_y and (cum_move_down or at_bottom_wall))
+            return risky_rights or risky_lefts or risky_ups or risky_downs
+
+        STATE_VECTOR = [
+            _get_dangerous_straight_logic(),       # DANGEROUS STRAIGHT
+            _get_dangerous_right_logic(),          # DANGEROUS RIGHT
+            _get_dangerous_left_logic(),           # DANGEROUS LEFT
             player_instance.delta_x == -20,                                     # PLAYER LEFT
             player_instance.delta_x == 20,                                      # PLAYER RIGHT
             player_instance.delta_y == -20,                                     # PLAYER UP
@@ -44,6 +87,12 @@ class GameAgent(object):
             pellet_instance.dim_y < player_instance.dim_y,                      # PELLET UP
             pellet_instance.dim_y > player_instance.dim_y                       # PELLET DOWN
         ]
+        for iterator in range(len(STATE_VECTOR)):
+            if STATE_VECTOR[iterator]:
+                STATE_VECTOR[iterator] = 1
+            else:
+                STATE_VECTOR[iterator] = 0
+        return np.asarray(STATE_VECTOR)
 
     def get_game_reward(self, player_instance, has_crashed):
         """ Method to determine effective weights to reward or punish player activity. """
