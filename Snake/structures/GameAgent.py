@@ -33,8 +33,15 @@ class GameAgent(object):
     def get_game_state(self):
         pass
 
-    def get_game_reward(self):
-        pass
+    def get_game_reward(self, player_instance, has_crashed):
+        """ Method to determine effective weights to reward or punish player activity. """
+        self.reward = 0
+        if has_crashed:
+            self.reward = -10
+            return self.reward
+        if player_instance.has_eaten:
+            self.reward = 10
+        return self.reward
 
     def produce_network_architecture(self):
         """ Method to create neural network architecture using optimized Keras models. """

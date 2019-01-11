@@ -17,7 +17,7 @@ class PlayerInstance(object):
         self.position = list()
         self.position.append([self.dim_x, self.dim_y])
         self.food = 1
-        self.is_eaten = False
+        self.has_eaten = False
         self.image = pygame.image.load("img/SnakeBody.png")
         self.delta_x, self.delta_y = 20, 0
 
@@ -43,9 +43,9 @@ class PlayerInstance(object):
     def move_player(self, move_action, x_pos, y_pos, game_session, pellets, game_agent):
         """ Method that stores logic to perform player positional move. """
         move_vector = [self.delta_x, self.delta_y]
-        if self.is_eaten:
+        if self.has_eaten:
             self.position.append([self.dim_x, self.dim_y])
-            self.is_eaten = False
+            self.has_eaten = False
             self.food += 1
         move_vector = self._move_logic(move_vector, move_action)
         self.delta_x, self.delta_y = move_vector
