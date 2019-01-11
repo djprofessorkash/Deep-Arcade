@@ -38,13 +38,13 @@ class GameAgent(object):
 
     def produce_network_architecture(self):
         model = Sequential()
-        model.add(Dense(output_dim=120, activation="relu", input_dim=11))
+        model.add(Dense(120, activation="relu", input_shape=(11,)))
         model.add(Dropout(0.15))
-        model.add(Dense(output_dim=120, activation="relu"))
+        model.add(Dense(120, activation="relu"))
         model.add(Dropout(0.15))
-        model.add(Dense(output_dim=120, activation="relu"))
+        model.add(Dense(120, activation="relu"))
         model.add(Dropout(0.15))
-        model.add(Dense(output_dim=3, activation="softmax"))
+        model.add(Dense(3, activation="softmax"))
         optimizer = Adam(self.learning_rate)
         model.compile(loss="mse", optimizer=optimizer)
         return model
