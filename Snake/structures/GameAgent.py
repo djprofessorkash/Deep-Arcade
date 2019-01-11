@@ -30,8 +30,20 @@ class GameAgent(object):
         self.actual = list()
         self.memory = list()
 
-    def get_game_state(self):
-        pass
+    def get_game_state(self, game_session, player_instance, pellet_instance):
+        state_vector = [
+            self._get_dangerous_straight_logic(game_session, player_instance),  # DANGEROUS STRAIGHT
+            self._get_dangerous_right_logic(game_session, player_instance),     # DANGEROUS RIGHT
+            self._get_dangerous_left_logic(game_session, player_instance),      # DANGEROUS LEFT
+            player_instance.delta_x == -20,                                     # PLAYER LEFT
+            player_instance.delta_x == 20,                                      # PLAYER RIGHT
+            player_instance.delta_y == -20,                                     # PLAYER UP
+            player_instance.delta_y == 20,                                      # PLAYER DOWN
+            pellet_instance.dim_x < player_instance.dim_x,                      # PELLET LEFT
+            pellet_instance.dim_x > player_instance.dim_x,                      # PELLET RIGHT
+            pellet_instance.dim_y < player_instance.dim_y,                      # PELLET UP
+            pellet_instance.dim_y > player_instance.dim_y                       # PELLET DOWN
+        ]
 
     def get_game_reward(self, player_instance, has_crashed):
         """ Method to determine effective weights to reward or punish player activity. """

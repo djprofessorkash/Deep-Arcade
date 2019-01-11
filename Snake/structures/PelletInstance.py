@@ -12,8 +12,7 @@ import pygame
 class PelletInstance(object):
     """ Object storing pellet instance to serve as player food. """
     def __init__(self):
-        self.dim_x = 240
-        self.dim_y = 200
+        self.dim_x, self.dim_y = 240, 200
         self.sprite = pygame.image.load("img/pellet2.png")
 
     def get_pellet_position(self, game_session, player_instance):
