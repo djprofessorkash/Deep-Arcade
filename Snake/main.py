@@ -29,6 +29,22 @@ def get_score(score, scoreboard):
     else:
         return scoreboard
 
+def initialize_game(player_instance, game_session, pellet_instance, game_agent):
+    """ Function to initialize game session with appropriate player and food parameters. """
+    pass
+
+def render_user_interface(game_session, score, scoreboard):
+    """ Function to render the game's UI. """
+    pass
+
+def render_game(player_instance, pellet_instance, game_session, scoreboard):
+    """ Function to render the game board with complete mechanics. """
+    pass
+
+def _plot_game_results(counter_plot, score_plot):
+    """ Helper function utilizing Seaborn to statistically plot game session results. """
+    pass
+
 def _update_screen():
     """ Helper function to update physical screen. """
     pygame.display.update()
