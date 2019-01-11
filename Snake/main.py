@@ -183,7 +183,7 @@ def main():
     scoreboard = 0
 
     # print("Second check: ", getframeinfo(currentframe()).lineno)
-    while training_counter < 150:
+    while training_counter < 100:
         game = GameBoard(440, 440)
         player_1 = game.player
         food_1 = game.food
@@ -199,27 +199,28 @@ def main():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                else:
-                    game_agent.epsilon = 80 - training_counter
-                    old_state = game_agent.get_game_state(game, player_1, food_1)
-                    if randint(0, 200) < game_agent.epsilon:
-                        final_move = to_categorical(randint(0, 2), num_classes=3)
-                    else:
-                        prediction = game_agent.model.predict(old_state.reshape((1, 11)))
-                        final_move = to_categorical(np.argmax(prediction[0]), num_classes=3)
+            game_agent.epsilon = 40 - training_counter
+            old_state = game_agent.get_game_state(game, player_1, food_1)
+            if randint(0, 200) < game_agent.epsilon:
+                print("> Exploring")
+                final_move = to_categorical(randint(0, 2), num_classes=3)
+            else:
+                print("> Exploiting")
+                prediction = game_agent.model.predict(old_state.reshape((1, 11)))
+                final_move = to_categorical(np.argmax(prediction[0]), num_classes=3)
 
-                    # print("Fifth check: ", getframeinfo(currentframe()).lineno)
-                    pygame.time.wait(speed)
-                    player_1.move_player(final_move, player_1.dim_x, player_1.dim_y, game, food_1, game_agent)
-                    new_state = game_agent.get_game_state(game, player_1, food_1)
-                    reward = game_agent.get_game_reward(player_1, game.has_crashed)
-                    game_agent.short_term_memory_trainer(old_state, final_move, reward, new_state, game.has_crashed)
-                    game_agent.save_state_to_memory(old_state, final_move, reward, new_state, game.has_crashed)
-                    scoreboard = get_score(game.score, scoreboard)
-                    # print("Sixth check: ", getframeinfo(currentframe()).lineno)
-                    if display_option:
-                        render_game(player_1, food_1, game, scoreboard)
-                        pygame.time.wait(speed)
+            # print("Fifth check: ", getframeinfo(currentframe()).lineno)
+            pygame.time.wait(speed)
+            player_1.move_player(final_move, player_1.dim_x, player_1.dim_y, game, food_1, game_agent)
+            new_state = game_agent.get_game_state(game, player_1, food_1)
+            reward = game_agent.get_game_reward(player_1, game.has_crashed)
+            game_agent.short_term_memory_trainer(old_state, final_move, reward, new_state, game.has_crashed)
+            game_agent.save_state_to_memory(old_state, final_move, reward, new_state, game.has_crashed)
+            scoreboard = get_score(game.score, scoreboard)
+            # print("Sixth check: ", getframeinfo(currentframe()).lineno)
+            if display_option:
+                render_game(player_1, food_1, game, scoreboard)
+                pygame.time.wait(speed)
             # print("Seventh check: ", getframeinfo(currentframe()).lineno)
 
         game_agent.replay_from_memory(game_agent.memory)
