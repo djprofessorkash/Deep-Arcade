@@ -10,7 +10,7 @@ NOTE:           Uses the Deep-Q Networks Reinforcement model.
 from keras.optimizers import Adam
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout
-import random
+from random import sample
 import numpy as np
 import pandas as pd
 from operator import add
@@ -58,4 +58,14 @@ class GameAgent(object):
         pass
 
     def replay_from_memory(self, memory_bank):
-        pass
+        if len(memory_bank) > 1000:
+            batch = sample(memory_bank, 1000)
+        else:
+            batch = memory_bank
+        for current_state, current_action, current_reward, next_state, stop in batch:
+            target_ = current_reward
+            if not stop:
+                target_ = current_reward + (self.gamma * np.amax(self.model.predict(np.array([next_state]))[0]))
+            target_final = self.model.predict(np.array([current_state]))
+            target_final[0][np.argmax(current_action)] = target_
+            self.model.fit(np.array([current_state]), target_final, epochs=1, verbose=0)
