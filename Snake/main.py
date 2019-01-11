@@ -22,7 +22,12 @@ def player_eat_food(player_instance, pellet_instance, game_session):
         player_instance.has_eaten = True
         game_session.score += 1
 
-
+def get_score(score, scoreboard):
+    """ Function to grab current high score from game session. """
+    if score >= scoreboard:
+        return score
+    else:
+        return scoreboard
 
 def _update_screen():
     """ Helper function to update physical screen. """
