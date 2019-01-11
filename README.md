@@ -39,3 +39,5 @@ Please *star* this repo and *follow* my progress into the world of deep learning
 If you would like to contact me to provide feedback, ask any questions, or otherwise outreach, please email me at _aakash.sudhakar@gmail.com_. 
 
 Created and maintained by <strong>Aakash Sudhakar</strong>.
+
+Special thanks to Mauro Comi's brilliant Towards Data Science [article](https://towardsdatascience.com/how-to-teach-an-ai-to-play-games-deep-reinforcement-learning-28f9b920440a) that inspired these projects. 
