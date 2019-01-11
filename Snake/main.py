@@ -73,7 +73,7 @@ def main():
     scoreboard = 0
 
     # print("Second check: ", getframeinfo(currentframe()).lineno)
-    while training_counter < 3:
+    while training_counter < 150:
         game = GameBoard.GameBoard(440, 440)
         player_1 = game.player
         food_1 = game.food
@@ -89,7 +89,7 @@ def main():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-            game_agent.epsilon = 40 - training_counter
+            game_agent.epsilon = 55 - training_counter
             old_state = game_agent.get_game_state(game, player_1, food_1)
             if randint(0, 200) < game_agent.epsilon:
                 print("> Exploring")
