@@ -87,7 +87,7 @@ def main():
                     sys.exit()
             game_agent.epsilon = 100 - training_counter
             old_state = game_agent.get_game_state(game, player_1, food_1)
-            if randint(0, 215) < game_agent.epsilon:
+            if randint(0, 200) < game_agent.epsilon:
                 print("> Exploring at epoch {}.".format(training_counter))
                 final_move = to_categorical(randint(0, 2), num_classes=3)
             else:
