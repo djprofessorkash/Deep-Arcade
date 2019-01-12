@@ -65,41 +65,36 @@ def _plot_game_results(counter_plot, score_plot):
 
 def main():
     """ Main run function. """
-    # print("First check: ", getframeinfo(currentframe()).lineno)
     pygame.init()
     game_agent = GameAgent.GameAgent()
-    training_counter = 0
+    training_counter, scoreboard = 0, 0
     score_plot, counter_plot = list(), list()
-    scoreboard = 0
+    epochs_ = 200
 
-    # print("Second check: ", getframeinfo(currentframe()).lineno)
-    while training_counter < 150:
+    while training_counter < epochs_:
         game = GameBoard.GameBoard(440, 440)
         player_1 = game.player
         food_1 = game.food
-        # print("Third check: ", getframeinfo(currentframe()).lineno)
 
         initialize_game(player_1, game, food_1, game_agent)
         if display_option:
             render_game(player_1, food_1, game, scoreboard)
-        # print("Fourth check: ", getframeinfo(currentframe()).lineno)
 
         while not game.has_crashed:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-            game_agent.epsilon = 75 - training_counter
+            game_agent.epsilon = 100 - training_counter
             old_state = game_agent.get_game_state(game, player_1, food_1)
-            if randint(0, 200) < game_agent.epsilon:
-                print("> Exploring")
+            if randint(0, 215) < game_agent.epsilon:
+                print("> Exploring at epoch {}.".format(training_counter))
                 final_move = to_categorical(randint(0, 2), num_classes=3)
             else:
-                print("> Exploiting")
+                print("> Exploiting at epoch {}.".format(training_counter))
                 prediction = game_agent.model.predict(old_state.reshape((1, 11)))
                 final_move = to_categorical(np.argmax(prediction[0]), num_classes=3)
 
-            # print("Fifth check: ", getframeinfo(currentframe()).lineno)
             pygame.time.wait(speed)
             player_1.move_player(final_move, player_1.dim_x, player_1.dim_y, game, food_1, game_agent)
             new_state = game_agent.get_game_state(game, player_1, food_1)
@@ -107,23 +102,21 @@ def main():
             game_agent.short_term_memory_trainer(old_state, final_move, reward, new_state, game.has_crashed)
             game_agent.save_state_to_memory(old_state, final_move, reward, new_state, game.has_crashed)
             scoreboard = get_score(game.score, scoreboard)
-            # print("Sixth check: ", getframeinfo(currentframe()).lineno)
+
             if display_option:
                 render_game(player_1, food_1, game, scoreboard)
                 pygame.time.wait(speed)
-            # print("Seventh check: ", getframeinfo(currentframe()).lineno)
 
         game_agent.replay_from_memory(game_agent.memory)
         training_counter += 1
-        # print("Eighth check: ", getframeinfo(currentframe()).lineno)
         print("\nGAME: {}\tSCORE: {}\n".format(training_counter, game.score))
         score_plot.append(game.score)
         counter_plot.append(training_counter)
+    # TODO: Save these as different weights files
     game_agent.model.save_weights("structures/data/custom_weights.hdf5")
-    print("Out-of-while-loop check: ", getframeinfo(currentframe()).lineno)
     _plot_game_results(counter_plot, score_plot)
 
 
 if __name__ == "__main__":
     main()
-    print("Main-run done check: ", getframeinfo(currentframe()).lineno)
+    print("Simulation complete. End run.")

@@ -24,7 +24,7 @@ class GameAgent(object):
         self.short_memory = np.array([])
         self.agent_target = 1
         self.agent_prediction = 0
-        self.learning_rate = 0.005
+        self.learning_rate = 0.0005             # Default rate
         self.model = self.produce_network_architecture()
         # self.model = self.produce_network_architecture("structures/data/custom_weights.hdf5")
         self.epsilon = 0
