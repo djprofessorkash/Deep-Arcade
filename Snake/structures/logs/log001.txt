@@ -1,5 +1,5 @@
 LOG001
-
+------
 MODEL TYPE: Sequential
 MODEL PARAMS:
     - learning_rate = 0.0005
@@ -16,4 +16,8 @@ MODEL LAYERS:
     - Adam(learning_rate)
 EPOCHS: 300
 EPSILON: range(200, 0, -1) {200 - EPOCHS}
+RANDOM RANGE: randint(0, 300)
 DISTRIBUTION FILENAME: dist001.png
+MIN. SCORE:
+MAX. SCORE:
+AVERAGE SCORE:

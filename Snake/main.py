@@ -71,7 +71,12 @@ def main():
     game_agent = GameAgent.GameAgent()
     training_counter, scoreboard = 0, 0
     score_plot, counter_plot = list(), list()
-    epochs_ = 3
+
+    # NOTE: Editable params for model parameter tuning
+    epochs_ = 150
+    eps_ceil = 80
+    rand_ceil = 200
+    save_name = "dist002"
 
     while training_counter < epochs_:
         game = GameBoard.GameBoard(440, 440)
@@ -87,9 +92,9 @@ def main():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-            game_agent.epsilon = 200 - training_counter
+            game_agent.epsilon = eps_ceil - training_counter
             old_state = game_agent.get_game_state(game, player_1, food_1)
-            if randint(0, epochs_) < game_agent.epsilon:
+            if randint(0, rand_ceil) < game_agent.epsilon:
                 print("> Exploring at epoch {}.".format(training_counter))
                 final_move = to_categorical(randint(0, 2), num_classes=3)
             else:
@@ -116,7 +121,7 @@ def main():
         counter_plot.append(training_counter)
     # TODO: Save these as different weights files
     game_agent.model.save_weights("structures/data/custom_weights.hdf5")
-    _plot_game_results(counter_plot, score_plot, save_name="dist001")
+    _plot_game_results(counter_plot, score_plot, save_name=save_name)
 
 if __name__ == "__main__":
     main()
