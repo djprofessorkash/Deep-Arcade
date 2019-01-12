@@ -1,0 +1,19 @@
+LOG001
+
+MODEL TYPE: Sequential
+MODEL PARAMS:
+    - learning_rate = 0.0005
+    - gamma = 0.9
+MODEL PRETRAIN W/ CUSTOM WEIGHTS? False
+MODEL LAYERS:
+    - Dense(output_dim=120, activation="relu", input_dim=(11,))
+    - Dropout(0.15)
+    - Dense(output_dim=60)
+    - Dropout(0.15)
+    - Dense(output_dim=30)
+    - Dropout(0.15)
+    - Dense(output_dim=3, activation="softmax")
+    - Adam(learning_rate)
+EPOCHS: 300
+EPSILON: range(200, 0, -1) {200 - EPOCHS}
+DISTRIBUTION FILENAME: dist001.png

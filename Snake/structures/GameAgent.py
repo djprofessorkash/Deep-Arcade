@@ -76,17 +76,17 @@ class GameAgent(object):
             return risky_rights or risky_lefts or risky_ups or risky_downs
 
         STATE_VECTOR = [
-            _get_dangerous_straight_logic(),                                    # DANGEROUS STRAIGHT
-            _get_dangerous_right_logic(),                                       # DANGEROUS RIGHT
-            _get_dangerous_left_logic(),                                        # DANGEROUS LEFT
-            player_instance.delta_x == -20,                                     # PLAYER LEFT
-            player_instance.delta_x == 20,                                      # PLAYER RIGHT
-            player_instance.delta_y == -20,                                     # PLAYER UP
-            player_instance.delta_y == 20,                                      # PLAYER DOWN
-            pellet_instance.dim_x < player_instance.dim_x,                      # PELLET LEFT
-            pellet_instance.dim_x > player_instance.dim_x,                      # PELLET RIGHT
-            pellet_instance.dim_y < player_instance.dim_y,                      # PELLET UP
-            pellet_instance.dim_y > player_instance.dim_y                       # PELLET DOWN
+            _get_dangerous_straight_logic(),                                # DANGEROUS STRAIGHT
+            _get_dangerous_right_logic(),                                   # DANGEROUS RIGHT
+            _get_dangerous_left_logic(),                                    # DANGEROUS LEFT
+            player_instance.delta_x == -20,                                 # PLAYER LEFT
+            player_instance.delta_x == 20,                                  # PLAYER RIGHT
+            player_instance.delta_y == -20,                                 # PLAYER UP
+            player_instance.delta_y == 20,                                  # PLAYER DOWN
+            pellet_instance.dim_x < player_instance.dim_x,                  # PELLET LEFT
+            pellet_instance.dim_x > player_instance.dim_x,                  # PELLET RIGHT
+            pellet_instance.dim_y < player_instance.dim_y,                  # PELLET UP
+            pellet_instance.dim_y > player_instance.dim_y                   # PELLET DOWN
         ]
         for iterator in range(len(STATE_VECTOR)):
             if STATE_VECTOR[iterator]:
@@ -110,9 +110,9 @@ class GameAgent(object):
         model = Sequential()
         model.add(Dense(120, activation="relu", input_shape=(11,)))
         model.add(Dropout(0.15))
-        model.add(Dense(120, activation="relu"))
+        model.add(Dense(60, activation="relu"))
         model.add(Dropout(0.15))
-        model.add(Dense(120, activation="relu"))
+        model.add(Dense(30, activation="relu"))
         model.add(Dropout(0.15))
         model.add(Dense(3, activation="softmax"))
         optimizer = Adam(self.learning_rate)

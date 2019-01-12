@@ -56,11 +56,13 @@ def render_game(player_instance, pellet_instance, game_session, scoreboard):
     player_instance.render_player(player_instance.position[-1][0], player_instance.position[-1][1], player_instance.food, game_session)
     pellet_instance.display_pellet(pellet_instance.dim_x, pellet_instance.dim_y, game_session)
 
-def _plot_game_results(counter_plot, score_plot):
+def _plot_game_results(counter_plot, score_plot, save_name=None):
     """ Helper function utilizing Seaborn to statistically plot game session results. """
     sns.set(color_codes=True)
     ax = sns.regplot(np.array([counter_plot])[0], np.array([score_plot])[0], color="b", x_jitter=0.1, line_kws={"color": "green"})
     ax.set(xlabel="games", ylabel="score")
+    if save_name:
+        plt.savefig("structures/distributions/{}.png".format(save_name), dpi=400)
     plt.show()
 
 def main():
@@ -69,7 +71,7 @@ def main():
     game_agent = GameAgent.GameAgent()
     training_counter, scoreboard = 0, 0
     score_plot, counter_plot = list(), list()
-    epochs_ = 200
+    epochs_ = 3
 
     while training_counter < epochs_:
         game = GameBoard.GameBoard(440, 440)
@@ -85,9 +87,9 @@ def main():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-            game_agent.epsilon = 100 - training_counter
+            game_agent.epsilon = 200 - training_counter
             old_state = game_agent.get_game_state(game, player_1, food_1)
-            if randint(0, 200) < game_agent.epsilon:
+            if randint(0, epochs_) < game_agent.epsilon:
                 print("> Exploring at epoch {}.".format(training_counter))
                 final_move = to_categorical(randint(0, 2), num_classes=3)
             else:
@@ -114,8 +116,7 @@ def main():
         counter_plot.append(training_counter)
     # TODO: Save these as different weights files
     game_agent.model.save_weights("structures/data/custom_weights.hdf5")
-    _plot_game_results(counter_plot, score_plot)
-
+    _plot_game_results(counter_plot, score_plot, save_name="dist001")
 
 if __name__ == "__main__":
     main()
