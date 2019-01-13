@@ -46,7 +46,7 @@ class GameAgent(object):
         cum_move_up = (list(map(add, player_instance.position[-1], [0, -20])) in player_instance.position)
         cum_move_down = (list(map(add, player_instance.position[-1], [0, 20])) in player_instance.position)
 
-        at_right_wall = player_instance.position[-1][0] + 20 >= (game_session.play_width - 20)
+        at_right_wall = player_instance.position[-1][0] + 20 > (game_session.play_width - 20)
         at_left_wall = player_instance.position[-1][0] - 20 < 20
         at_top_wall = player_instance.position[-1][-1] - 20 < 20
         at_bottom_wall = player_instance.position[-1][-1] + 20 >= (game_session.play_height - 20)
@@ -77,6 +77,7 @@ class GameAgent(object):
 
         STATE_VECTOR = [
             _get_dangerous_straight_logic(),                                # DANGEROUS STRAIGHT
+            # TODO: Dangerous Right may be broken -- top-right corner and rebounding loop issues
             _get_dangerous_right_logic(),                                   # DANGEROUS RIGHT
             _get_dangerous_left_logic(),                                    # DANGEROUS LEFT
             player_instance.delta_x == -20,                                 # PLAYER LEFT

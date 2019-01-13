@@ -76,8 +76,12 @@ def main():
     epochs_ = 150
     eps_ceil = 80
     rand_ceil = 200
-    save_name = "dist002"
 
+    # for _training_round in range(2, 12):
+    # if _training_round < 10:
+    #     save_name = "dist00{}".format(_training_round)
+    # else:
+    #     save_name = "dist0{}".format(_training_round)
     while training_counter < epochs_:
         game = GameBoard.GameBoard(440, 440)
         player_1 = game.player
@@ -120,8 +124,8 @@ def main():
         score_plot.append(game.score)
         counter_plot.append(training_counter)
     # TODO: Save these as different weights files
-    game_agent.model.save_weights("structures/data/custom_weights.hdf5")
-    _plot_game_results(counter_plot, score_plot, save_name=save_name)
+    game_agent.model.save_weights("structures/data/custom_weights_EPO{}-EPS{}-RND{}.hdf5".format(epochs_, eps_ceil, rand_ceil))
+    _plot_game_results(counter_plot, score_plot)
 
 if __name__ == "__main__":
     main()

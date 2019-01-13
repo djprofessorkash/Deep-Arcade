@@ -1,6 +1,11 @@
+# Static files
 .DS_Store
 Snake/.DS_Store
 TicTacToe/__pycache__/
 TicTacToe/structures/__pycache__/
 Snake/__pycache__/
 Snake/structures/__pycache__/
+# Editable files
+Snake/structures/logs/log002.txt
+Snake/structures/distributions/dist0*.png
+Snake/structures/data/custom_weights_*.hdf5
