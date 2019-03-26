@@ -1,4 +1,4 @@
-# The Deep Reinforcement Learning Game Library
+# The Deep Reinforcement Learning (Deep RL) Game Library
 
 Welcome to the <i>Deep Reinforcement Learning Game Library</i>! 
 
@@ -6,7 +6,7 @@ This is a collection of games and playful simulations designed with two goals in
  - To pit users against custom-trained deep learning bots.
  - To introduce fellow gamers and developers to a profound application of programming in game development!
 
-<br>
+## Description
 
 **Deep Reinforcement Learning** is a powerful tool both blessed and cursed by its complexity and creative uses. 
 
@@ -16,7 +16,7 @@ Please *star* this repo and *follow* my progress into the world of deep learning
 
 :-)
 
----
+## Progression
 
 ### CURRENT GAMES:
 - Tic Tac Toe (_In Progress._)
@@ -34,7 +34,7 @@ Please *star* this repo and *follow* my progress into the world of deep learning
     - NumPy, Pandas
     - Seaborn, MatPlotLib
 
----
+## Credits
 
 If you would like to contact me to provide feedback, ask any questions, or otherwise outreach, please email me at _aakash.sudhakar@gmail.com_. 
 
