@@ -13,7 +13,7 @@ import numpy as np
 from random import randint
 from keras.utils import to_categorical
 from inspect import currentframe, getframeinfo
-from structures import GameAgent, GameBoard, PelletInstance, PlayerInstance
+from structures import GameAgent, GameBoard, PelletInstance, PlayerInstance, UserInstance
 
 display_option, speed = True, 50
 pygame.font.init()
@@ -65,68 +65,108 @@ def _plot_game_results(counter_plot, score_plot, save_name=None):
         plt.savefig("structures/distributions/{}.png".format(save_name), dpi=400)
     plt.show()
 
-def main():
-    """ Main run function. """
-    pygame.init()
-    game_agent = GameAgent.GameAgent()
-    training_counter, scoreboard = 0, 0
+def play_snake_with_bot(player, mode):
+    """ Runs Snake game and assumes gameplay control as GameAgent bot. """
+    game_agent = GameAgent.GameAgent(player)
+    scoreboard = 0
     score_plot, counter_plot = list(), list()
 
     # NOTE: Editable params for model parameter tuning
-    epochs_ = 150
-    eps_ceil = 80
-    rand_ceil = 200
+    epochs_ = 1
+    if mode == "exploit":
+        eps_ceil = 0
+    elif mode == "explore":
+        eps_ceil = 110
+    # eps_ceil = eps_ceil           # Increase to improve likelihood of exploration mode activation
+    rand_ceil = 200         # Decrease to improve likelihood of exploration mode activation
+    print("\nEPOCHS:\t{}\nEPSILON CEILING:\t{}\nRANDOM CEILING:\t{}\n".format(epochs_, eps_ceil, rand_ceil))
 
-    # for _training_round in range(2, 12):
+    # for _training_round in range(11, 20):
     # if _training_round < 10:
     #     save_name = "dist00{}".format(_training_round)
     # else:
     #     save_name = "dist0{}".format(_training_round)
-    while training_counter < epochs_:
-        game = GameBoard.GameBoard(440, 440)
-        player_1 = game.player
-        food_1 = game.food
+    while True:
+        training_counter = 0
+        while training_counter < epochs_:
+            game = GameBoard.GameBoard(440, 440)
+            player_1 = game.player
+            food_1 = game.food
 
-        initialize_game(player_1, game, food_1, game_agent)
-        if display_option:
-            render_game(player_1, food_1, game, scoreboard)
-
-        while not game.has_crashed:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-            game_agent.epsilon = eps_ceil - training_counter
-            old_state = game_agent.get_game_state(game, player_1, food_1)
-            if randint(0, rand_ceil) < game_agent.epsilon:
-                print("> Exploring at epoch {}.".format(training_counter))
-                final_move = to_categorical(randint(0, 2), num_classes=3)
-            else:
-                print("> Exploiting at epoch {}.".format(training_counter))
-                prediction = game_agent.model.predict(old_state.reshape((1, 11)))
-                final_move = to_categorical(np.argmax(prediction[0]), num_classes=3)
-
-            pygame.time.wait(speed)
-            player_1.move_player(final_move, player_1.dim_x, player_1.dim_y, game, food_1, game_agent)
-            new_state = game_agent.get_game_state(game, player_1, food_1)
-            reward = game_agent.get_game_reward(player_1, game.has_crashed)
-            game_agent.short_term_memory_trainer(old_state, final_move, reward, new_state, game.has_crashed)
-            game_agent.save_state_to_memory(old_state, final_move, reward, new_state, game.has_crashed)
-            scoreboard = get_score(game.score, scoreboard)
-
+            initialize_game(player_1, game, food_1, game_agent)
             if display_option:
                 render_game(player_1, food_1, game, scoreboard)
-                pygame.time.wait(speed)
 
-        game_agent.replay_from_memory(game_agent.memory)
-        training_counter += 1
-        print("\nGAME: {}\tSCORE: {}\n".format(training_counter, game.score))
-        score_plot.append(game.score)
-        counter_plot.append(training_counter)
-    # TODO: Save these as different weights files
-    game_agent.model.save_weights("structures/data/custom_weights_EPO{}-EPS{}-RND{}.hdf5".format(epochs_, eps_ceil, rand_ceil))
-    _plot_game_results(counter_plot, score_plot)
+            while not game.has_crashed:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
+                game_agent.epsilon = eps_ceil - training_counter
+                old_state = game_agent.get_game_state(game, player_1, food_1)
+                if randint(0, rand_ceil) < game_agent.epsilon:
+                    # print("> Exploring at epoch {}.".format(training_counter + 1))
+                    final_move = to_categorical(randint(0, 2), num_classes=3)
+                else:
+                    # print("> Exploiting at epoch {}.".format(training_counter + 1))
+                    prediction = game_agent.model.predict(old_state.reshape((1, 11)))
+                    final_move = to_categorical(np.argmax(prediction[0]), num_classes=3)
+
+                pygame.time.wait(speed)
+                player_1.move_player(final_move, player_1.dim_x, player_1.dim_y, game, food_1, game_agent)
+                new_state = game_agent.get_game_state(game, player_1, food_1)
+                reward = game_agent.get_game_reward(player_1, game.has_crashed)
+                game_agent.short_term_memory_trainer(old_state, final_move, reward, new_state, game.has_crashed)
+                game_agent.save_state_to_memory(old_state, final_move, reward, new_state, game.has_crashed)
+                scoreboard = get_score(game.score, scoreboard)
+
+                if display_option:
+                    render_game(player_1, food_1, game, scoreboard)
+                    pygame.time.wait(speed)
+
+            game_agent.replay_from_memory(game_agent.memory)
+            training_counter += 1
+            print("\nGAME: {}\tSCORE: {}\n".format(training_counter, game.score))
+            score_plot.append(game.score)
+            counter_plot.append(training_counter)
+        # TODO: Save these as different weights files
+    # game_agent.model.save_weights("structures/data/custom_weights?model=3x120?epo={}?eps={}?rand={}.hdf5".format(epochs_, eps_ceil, rand_ceil))
+    # _plot_game_results(counter_plot, score_plot)
+
+def play_snake_with_user():
+    """ Runs Snake game and gives gameplay controls to user. """
+    game = GameBoard.GameBoard(440, 440)
+    player_1 = UserInstance.UserInstance(speed)
+    food_1 = game.food
+
+def main(player="smart", mode="exploit"):
+    """ Main run function. """
+    pygame.init()
+    # if player == "bot":
+    #     play_snake_with_bot()
+    # elif player == "user":
+    #     play_snake_with_user()
+    play_snake_with_bot(player, mode)
+
+# ====================================================================================
+# ====================================================================================
+# ====================================================================================
+# ====================================================================================
+# ====================================================================================
+
+
+
+# ====================================================================================
+# ====================================================================================
+# ====================================================================================
+# ====================================================================================
+# ====================================================================================
 
 if __name__ == "__main__":
-    main()
+    _player = sys.argv[1:]
+    if _player:
+        print("\nINTELLIGENCE:\t{}\nMOVEMENT MODE:\t{}\n".format(_player[0], _player[1]))
+        main(_player[0], _player[1])
+    else:
+        main()
     print("Simulation complete. End run.")

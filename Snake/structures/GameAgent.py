@@ -17,7 +17,7 @@ from operator import add
 
 class GameAgent(object):
     """ Object structure storing the Deep Reinforcement Learning Agent. """
-    def __init__(self):
+    def __init__(self, player):
         self.reward = 0
         self.gamma = 0.9
         self.df = pd.DataFrame()
@@ -25,8 +25,10 @@ class GameAgent(object):
         self.agent_target = 1
         self.agent_prediction = 0
         self.learning_rate = 0.0005             # Default rate
-        self.model = self.produce_network_architecture()
-        # self.model = self.produce_network_architecture("structures/data/custom_weights.hdf5")
+        if player == "dumb":
+            self.model = self.produce_network_architecture()
+        if player == "smart":
+            self.model = self.produce_network_architecture("structures/data/custom_weights?model=3x120?epo=200?eps=110?rand=200.hdf5")
         self.epsilon = 0
         self.actual = list()
         self.memory = list()
@@ -46,14 +48,15 @@ class GameAgent(object):
         cum_move_up = (list(map(add, player_instance.position[-1], [0, -20])) in player_instance.position)
         cum_move_down = (list(map(add, player_instance.position[-1], [0, 20])) in player_instance.position)
 
-        at_right_wall = player_instance.position[-1][0] + 20 > (game_session.play_width - 20)
+        at_right_wall_exc = player_instance.position[-1][0] + 20 > (game_session.play_width - 20)
+        at_right_wall_inc = player_instance.position[-1][0] + 20 >= (game_session.play_width - 20)
         at_left_wall = player_instance.position[-1][0] - 20 < 20
         at_top_wall = player_instance.position[-1][-1] - 20 < 20
         at_bottom_wall = player_instance.position[-1][-1] + 20 >= (game_session.play_height - 20)
 
         def _get_dangerous_straight_logic():
             """ Helper method to construct logical calculation of danger-straight movement. """
-            risky_rights = (move_right and no_move_y and (cum_move_right or at_right_wall))
+            risky_rights = (move_right and no_move_y and (cum_move_right or at_right_wall_inc))
             risky_lefts = (move_left and no_move_y and (cum_move_left or at_left_wall))
             risky_ups = (no_move_x and move_up and (cum_move_up or at_top_wall))
             risky_downs = (no_move_x and move_down and (cum_move_down or at_bottom_wall))
@@ -61,7 +64,7 @@ class GameAgent(object):
 
         def _get_dangerous_right_logic():
             """ Helper method to construct logical calculation of danger-right movement. """
-            risky_rights = (no_move_x and move_up and (cum_move_right or at_right_wall))
+            risky_rights = (no_move_x and move_up and (cum_move_right or at_right_wall_exc))
             risky_lefts = (no_move_x and move_down and (cum_move_left or at_left_wall))
             risky_ups = (move_left and no_move_y and (cum_move_up or at_top_wall))
             risky_downs = (move_right and no_move_y and (cum_move_down or at_bottom_wall))
@@ -69,7 +72,7 @@ class GameAgent(object):
 
         def _get_dangerous_left_logic():
             """ Helper method to construct logical calculation of danger-left movement. """
-            risky_rights = (no_move_x and move_down and (cum_move_right or at_right_wall))
+            risky_rights = (no_move_x and move_down and (cum_move_right or at_right_wall_exc))
             risky_lefts = (no_move_x and move_up and (cum_move_left or at_left_wall))
             risky_ups = (move_right and no_move_y and (cum_move_up or at_top_wall))
             risky_downs = (move_left and no_move_y and (cum_move_down or at_bottom_wall))
@@ -77,7 +80,6 @@ class GameAgent(object):
 
         STATE_VECTOR = [
             _get_dangerous_straight_logic(),                                # DANGEROUS STRAIGHT
-            # TODO: Dangerous Right may be broken -- top-right corner and rebounding loop issues
             _get_dangerous_right_logic(),                                   # DANGEROUS RIGHT
             _get_dangerous_left_logic(),                                    # DANGEROUS LEFT
             player_instance.delta_x == -20,                                 # PLAYER LEFT
@@ -111,9 +113,9 @@ class GameAgent(object):
         model = Sequential()
         model.add(Dense(120, activation="relu", input_shape=(11,)))
         model.add(Dropout(0.15))
-        model.add(Dense(60, activation="relu"))
+        model.add(Dense(120, activation="relu"))
         model.add(Dropout(0.15))
-        model.add(Dense(30, activation="relu"))
+        model.add(Dense(120, activation="relu"))
         model.add(Dropout(0.15))
         model.add(Dense(3, activation="softmax"))
         optimizer = Adam(self.learning_rate)
