@@ -133,11 +133,11 @@ def play_snake_with_bot(player, mode):
     # game_agent.model.save_weights("structures/data/custom_weights?model=3x120?epo={}?eps={}?rand={}.hdf5".format(epochs_, eps_ceil, rand_ceil))
     # _plot_game_results(counter_plot, score_plot)
 
-def play_snake_with_user():
-    """ Runs Snake game and gives gameplay controls to user. """
-    game = GameBoard.GameBoard(440, 440)
-    player_1 = UserInstance.UserInstance(speed)
-    food_1 = game.food
+# def play_snake_with_user():
+#     """ Runs Snake game and gives gameplay controls to user. """
+#     game = GameBoard.GameBoard(440, 440)
+#     player_1 = UserInstance.UserInstance(speed)
+#     food_1 = game.food
 
 def main(player="smart", mode="exploit"):
     """ Main run function. """
