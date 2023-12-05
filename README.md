@@ -1,4 +1,6 @@
-# The Deep Reinforcement Learning (Deep RL) Game Library
+# The Deep Arcade
+
+## A Reinforcement Learning (Deep RL) Game Library
 
 Welcome to the <i>Deep Reinforcement Learning Game Library</i>! 
 
